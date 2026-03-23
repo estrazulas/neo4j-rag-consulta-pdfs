@@ -2,6 +2,8 @@
 
 ## 📋 Descrição do Projeto
 
+Projeto utilizado durante a Engenharia de Software em IA Aplicada - UNIPDS
+
 Este projeto implementa um **sistema de busca semântica** usando embeddings de texto e Neo4j como banco de dados vetorial. O sistema carrega um PDF, gera representações vetoriais (embeddings) do seu conteúdo e permite realizar buscas por similaridade usando linguagem natural.
 
 ### O que o projeto faz:
