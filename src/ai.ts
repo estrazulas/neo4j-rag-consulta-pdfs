@@ -84,10 +84,11 @@ export class AI{
             question: input.question,
             context: input.context
         })
-
+         
         
         return {
-            ...input
+            ...input,
+            answer: rawResponse
         }
     }
     async answerQuestion(question: string)  {
@@ -99,8 +100,11 @@ export class AI{
         const result = await chain.invoke({
             question
         })
-
-       console.log('answer', result)    
+        this.params.debugLog("\n🎙️  Pergunta:");
+        this.params.debugLog(question, "\n");
+        this.params.debugLog("💬 Resposta:");
+        this.params.debugLog(result.answer || result.error, "\n");
+       return result     
     }
 
 }

@@ -3,10 +3,10 @@ import { CONFIG } from "./config.ts";
 import { DocumentProcessor } from "./documentProcessor.ts";
 import { type PretrainedOptions } from "@huggingface/transformers";
 import { Neo4jVectorStore } from "@langchain/community/vectorstores/neo4j_vector";
-import { displayResults } from "./util.ts";
+//import { displayResults } from "./util.ts";
 import { ChatOpenAI } from "@langchain/openai";
 import { AI } from "./ai.ts";
-
+import { writeFile, mkdir } from 'node:fs/promises'
 
 
 let _neo4jVectorStore = null
@@ -68,7 +68,8 @@ try {
     // ==================== STEP 2: RUN SIMILARITY SEARCH ====================
     console.log("🔍 ETAPA 2: Executando buscas por similaridade...\n");
     const questions = [
-        "O que são tensores e como são representados em JavaScript?",
+        "O que significa treinar uma rede neural?",
+       // "O que são tensores e como são representados em JavaScript?",
       /*   "Como converter objetos JavaScript em tensores?",
         "O que é normalização de dados e por que é necessária?",
         "Como funciona uma rede neural no TensorFlow.js?",
@@ -89,12 +90,17 @@ try {
      
         const results = await ai.answerQuestion(question)
 
-      /*   const results = await _neo4jVectorStore.similaritySearch(
-            question,
-            CONFIG.similarity.topK
-        )
-        displayResults(results) */
-        // console.log(results)
+        if(results.error) {
+            console.log(`\n❌ Erro: ${results.error}\n`);
+            continue
+        }
+
+        console.log(`\n${results.answer}\n`);
+        await mkdir(CONFIG.output.answersFolder, { recursive: true })
+
+        const fileName = `${CONFIG.output.answersFolder}/${CONFIG.output.fileName}-${question}-${Date.now()}.md`
+
+        await writeFile(fileName, results.answer!)
     }
 
 
