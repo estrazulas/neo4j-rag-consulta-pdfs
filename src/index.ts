@@ -4,6 +4,10 @@ import { DocumentProcessor } from "./documentProcessor.ts";
 import { type PretrainedOptions } from "@huggingface/transformers";
 import { Neo4jVectorStore } from "@langchain/community/vectorstores/neo4j_vector";
 import { displayResults } from "./util.ts";
+import { ChatOpenAI } from "@langchain/openai";
+import { AI } from "./ai.ts";
+
+
 
 let _neo4jVectorStore = null
 
@@ -24,10 +28,22 @@ try {
         CONFIG.textSplitter,
     )
     const documents = await documentProcessor.loadAndSplit()
+
    const embeddings = new HuggingFaceTransformersEmbeddings({
         model: CONFIG.embedding.modelName,
         pretrainedOptions: CONFIG.embedding.pretrainedOptions as PretrainedOptions
     }) 
+
+    const nlpModel = new ChatOpenAI({
+        temperature: CONFIG.openRouter.temperature,
+        maxRetries: CONFIG.openRouter.maxRetries,
+        modelName: CONFIG.openRouter.nlpModel,
+        openAIApiKey: CONFIG.openRouter.apiKey,
+        configuration: {
+            baseURL: CONFIG.openRouter.url,
+            defaultHeaders: CONFIG.openRouter.defaultHeaders
+        }
+    })
     // const response = await embeddings.embedQuery(
     //     "JavaScript"
     // )
@@ -53,23 +69,31 @@ try {
     console.log("🔍 ETAPA 2: Executando buscas por similaridade...\n");
     const questions = [
         "O que são tensores e como são representados em JavaScript?",
-        "Como converter objetos JavaScript em tensores?",
+      /*   "Como converter objetos JavaScript em tensores?",
         "O que é normalização de dados e por que é necessária?",
         "Como funciona uma rede neural no TensorFlow.js?",
         "O que significa treinar uma rede neural?",
-        "o que é hot enconding e quando usar?"
+        "o que é hot enconding e quando usar?" */
     ]
 
-    for (const question of questions) {
-        console.log(`\n${'='.repeat(80)}`);
-        console.log(`📌 PERGUNTA: ${question}`);
-        console.log('='.repeat(80));
+    const ai = new AI({
+        debugLog: console.log,
+        vectorStore: _neo4jVectorStore,
+        nlpModel,
+        promptConfig: CONFIG.promptConfig,
+        templateText: CONFIG.templateText,
+        topK: CONFIG.similarity.topK,
+    })
 
-        const results = await _neo4jVectorStore.similaritySearch(
+    for (const question of questions) {
+     
+        const results = await ai.answerQuestion(question)
+
+      /*   const results = await _neo4jVectorStore.similaritySearch(
             question,
             CONFIG.similarity.topK
         )
-        displayResults(results)
+        displayResults(results) */
         // console.log(results)
     }
 
