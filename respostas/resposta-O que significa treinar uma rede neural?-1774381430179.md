@@ -1,5 +1,0 @@
-Claro! Treinar uma rede neural é como ensinar uma máquina a reconhecer padrões em dados. Imagine que você tem uma imagem de uma pessoa e quer que ela identifique a idade dela. Para isso, você precisa ensinar a rede a associar certas características, como cor, tamanho e localização, com a idade correta. Isso é feito ajustando os parâmetros da rede, usando um processo chamado otimização, para que ela aprenda a prever com mais precisão.
-
-No TensorFlow.js, esse processo é feito de forma dinâmica, usando operações matemáticas simples, mas poderosas. Por exemplo, quando você vê dados, como a idade de uma pessoa, ele os converte em números e os alimenta para a rede. A rede então "aprende" com base em exemplos, ajustando seus "neurônios" para melhorar a precisão.
-
-Você pode pensar nisso como um jogo de adivinhação: a rede tenta adivinhar a categoria correta (idade) e, com cada tentativa, melhora. Se você quiser entender melhor, posso te mostrar um exemplo prático com código!

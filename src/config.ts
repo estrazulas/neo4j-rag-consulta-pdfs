@@ -41,7 +41,7 @@ export const CONFIG = Object.freeze({
         }
     },
     pdf: {
-        path: "./tensores.pdf",
+        path: "./modulo01.pdf",
     },
     textSplitter: {
         chunkSize: 1000,

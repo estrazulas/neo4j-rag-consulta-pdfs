@@ -57,18 +57,14 @@ try {
         CONFIG.neo4j
     )
 
-    clearAll(_neo4jVectorStore, CONFIG.neo4j.nodeLabel)
-    for (const [index, doc] of documents.entries()) {
-        console.log(`✅ Adicionando documento ${index + 1}/${documents.length}`);
-        await _neo4jVectorStore.addDocuments([doc])
-    }
+    
     console.log("\n✅ Base de dados populada com sucesso!\n");
 
 
     // ==================== STEP 2: RUN SIMILARITY SEARCH ====================
     console.log("🔍 ETAPA 2: Executando buscas por similaridade...\n");
     const questions = [
-        "O que significa treinar uma rede neural?",
+        "Quando você transforma cor = azul/vermelho/verde em colunas com 0 e 1 (ex.: [1,0,0]), isso é (qual das alternativas): A) Backpropagation, pois ajusta pesos com base no erro. B Decoding, pois escolhe a saída mais provável. C Normalização, pois coloca todos os valores entre 0 e 1. D One-hot encoding (categorização), pois representa categorias discretas com 0/1.",
        // "O que são tensores e como são representados em JavaScript?",
       /*   "Como converter objetos JavaScript em tensores?",
         "O que é normalização de dados e por que é necessária?",
@@ -98,7 +94,7 @@ try {
         console.log(`\n${results.answer}\n`);
         await mkdir(CONFIG.output.answersFolder, { recursive: true })
 
-        const fileName = `${CONFIG.output.answersFolder}/${CONFIG.output.fileName}-${question}-${Date.now()}.md`
+        const fileName = `${CONFIG.output.answersFolder}/${CONFIG.output.fileName}-${Date.now()}.md`
 
         await writeFile(fileName, results.answer!)
     }
